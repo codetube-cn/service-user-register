@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	service_user_register "codetube.cn/proto/service-user-register"
+	"codetube.cn/service-user-register/components"
 	"codetube.cn/service-user-register/server"
 	"fmt"
 	"google.golang.org/grpc"
@@ -20,6 +21,12 @@ func Start() {
 		log.Println(err)
 	}()
 	BootErrChan = make(chan error)
+
+	//初始化数据库连接
+	err := components.DB.MysqlInit()
+	if err != nil {
+		log.Fatal(err)
+	}
 	//初始化
 	//go func() {
 	//	err := initApp()
@@ -37,7 +44,7 @@ func Start() {
 		}()
 		regServer := grpc.NewServer()
 		service_user_register.RegisterUserRegisterServer(regServer, server.NewUserRegisterServer())
-		lis, err := net.Listen("tcp", ":8081")
+		lis, err := net.Listen("tcp", "0.0.0.0:8080")
 		if err != nil {
 			BootErrChan <- err
 		}
