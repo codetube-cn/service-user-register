@@ -4,6 +4,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+//CheckPassword 检查密码格式
+func CheckPassword(password string) bool {
+	passwordLen := len(password)
+	if passwordLen < 8 || passwordLen > 40 {
+		return false
+	}
+
+	return true
+}
+
 //HashPassword 加密密码
 func HashPassword(password string) string {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)

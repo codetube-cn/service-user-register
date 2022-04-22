@@ -8,7 +8,7 @@ type User struct {
 	Username     string `gorm:"uniqueIndex;default:null"` //账号
 	Mobile       string `gorm:"uniqueIndex;default:null"` //手机号
 	Email        string `gorm:"uniqueIndex;default:null"` //邮箱
-	Nickname     int    //昵称
+	Nickname     string //昵称
 	Password     string //密码
 	Avatar       string //头像
 	Enabled      int    //是否启用

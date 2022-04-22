@@ -1,6 +1,6 @@
 package config
 
-// ServiceConfig 网关配置
+// ServiceConfig 服务配置
 var ServiceConfig *Config
 
 func init() {

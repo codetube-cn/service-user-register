@@ -2,6 +2,7 @@ package server
 
 import (
 	"codetube.cn/core/codes"
+	"codetube.cn/core/libraries"
 	service_user_register "codetube.cn/proto/service-user-register"
 	"codetube.cn/service-user-register/components"
 	"codetube.cn/service-user-register/libraries/check"
@@ -14,22 +15,19 @@ import (
 
 // Email 使用邮箱注册
 func (s *UserRegisterServer) Email(c context.Context, request *service_user_register.EmailRequest) (*service_user_register.RegisterResultResponse, error) {
-	status := codes.Success
 	message := "success"
+	status := s.checkEmailParams(request)
+	if status != codes.Success {
+		return &service_user_register.RegisterResultResponse{
+			Status:  int64(status),
+			Message: message, //@todo 数字转文字
+			Id:      0,
+		}, nil
+	}
 
 	email := request.GetEmail()
 	passwd := request.GetPassword()
 	id := int64(0)
-	//检查邮箱和密码格式
-	if len(email) < 5 || len(email) > 20 {
-		status = codes.UserEmailInvalid
-	}
-	if len(passwd) < 8 || len(passwd) > 40 {
-		status = codes.UserPasswordInvalid
-	}
-	if status != codes.Success {
-		email = ""
-	}
 	//检查邮箱是否重复
 	userExist := check.UserExistByEmail(email)
 	if userExist {
@@ -60,4 +58,17 @@ func (s *UserRegisterServer) Email(c context.Context, request *service_user_regi
 		Message: message,
 		Id:      id,
 	}, nil
+}
+
+func (s *UserRegisterServer) checkEmailParams(request *service_user_register.EmailRequest) int {
+	email := request.GetEmail()
+	passwd := request.GetPassword()
+	//检查邮箱和密码格式
+	if !libraries.CheckEmail(email) {
+		return codes.UserEmailInvalid
+	}
+	if !password.CheckPassword(passwd) {
+		return codes.UserPasswordInvalid
+	}
+	return codes.Success
 }

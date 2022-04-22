@@ -27,6 +27,11 @@ func Start() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	//初始化缓存连接
+	err = components.Redis.RedisInit()
+	if err != nil {
+		log.Fatal(err)
+	}
 	//初始化
 	//go func() {
 	//	err := initApp()

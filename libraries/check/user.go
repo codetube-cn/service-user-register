@@ -24,3 +24,13 @@ func UserExistByEmail(username string) bool {
 	}
 	return true
 }
+
+// UserExistByMobile 检查手机号是否存在
+func UserExistByMobile(mobile string) bool {
+	user := &models.User{}
+	components.UserDB.Where("mobile = ?", mobile).First(user)
+	if user.ID < 1 {
+		return false
+	}
+	return true
+}

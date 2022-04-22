@@ -12,24 +12,21 @@ import (
 	"strconv"
 )
 
-// UserPassword 使用用户名和密码注册
-func (s *UserRegisterServer) UserPassword(c context.Context, request *service_user_register.UsernamePasswordRequest) (*service_user_register.RegisterResultResponse, error) {
-	status := codes.Success
+// Username 使用用户名和密码注册
+func (s *UserRegisterServer) Username(c context.Context, request *service_user_register.UsernameRequest) (*service_user_register.RegisterResultResponse, error) {
 	message := "success"
+	status := s.checkUsernameParams(request)
+	if status != codes.Success {
+		return &service_user_register.RegisterResultResponse{
+			Status:  int64(status),
+			Message: message, //@todo 数字转文字
+			Id:      0,
+		}, nil
+	}
 
+	id := int64(0)
 	username := request.GetUsername()
 	passwd := request.GetPassword()
-	id := int64(0)
-	//检查用户名和密码格式
-	if len(username) < 5 || len(username) > 20 {
-		status = codes.UserAccountInvalid
-	}
-	if len(passwd) < 8 || len(passwd) > 40 {
-		status = codes.UserPasswordInvalid
-	}
-	if status != codes.Success {
-		username = ""
-	}
 	//检查用户名是否重复
 	userExist := check.UserExistByUsername(username)
 	if userExist {
@@ -60,4 +57,18 @@ func (s *UserRegisterServer) UserPassword(c context.Context, request *service_us
 		Message: message,
 		Id:      id,
 	}, nil
+}
+
+func (s *UserRegisterServer) checkUsernameParams(request *service_user_register.UsernameRequest) int {
+	username := request.GetUsername()
+	passwd := request.GetPassword()
+
+	//检查用户名和密码格式
+	if len(username) < 5 || len(username) > 20 {
+		return codes.UserAccountInvalid
+	}
+	if !password.CheckPassword(passwd) {
+		return codes.UserPasswordInvalid
+	}
+	return codes.Success
 }

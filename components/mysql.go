@@ -13,19 +13,19 @@ import (
 // DB 数据库连接
 var DB = newDatabases()
 
-// UserDB 网关数据库连接
+// UserDB 用户数据库连接
 var UserDB *gorm.DB
 
 // 数据库连接列表
 type databases struct {
-	User *database // 网关使用的数据库连接
+	User *database // 用户使用的数据库连接
 }
 
 // 创建数据库连接列表
 func newDatabases() *databases {
 	return &databases{
 		User: &database{
-			config: config.ServiceConfig.Mysql.TransToGormConfig(),
+			config: config.ServiceConfig.Mysql["user"].TransToGormConfig(),
 		},
 	}
 }

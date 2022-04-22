@@ -8,10 +8,11 @@ import (
 )
 
 type Config struct {
-	Mysql *config.MysqlConfig `yaml:"mysql"` //数据库连接配置
+	Mysql map[string]*config.MysqlConfig `yaml:"mysql"` //数据库连接配置
+	Redis map[string]*config.RedisConfig `yaml:"redis"`
 }
 
-// NewConfig 创建网关配置
+// NewConfig 创建配置
 func NewConfig() *Config {
 	return &Config{}
 }
