@@ -3,7 +3,7 @@ package server
 import (
 	"codetube.cn/core/codes"
 	"codetube.cn/core/libraries"
-	service_user_register "codetube.cn/proto/service-user-register"
+	"codetube.cn/proto/service_user_register"
 	"codetube.cn/service-user-register/components"
 	"codetube.cn/service-user-register/libraries/check"
 	"codetube.cn/service-user-register/libraries/password"
@@ -15,7 +15,7 @@ import (
 )
 
 // Email 使用邮箱注册
-func (s *UserRegisterServer) Email(c context.Context, request *service_user_register.EmailRequest) (*service_user_register.RegisterResultResponse, error) {
+func (s *UserRegisterServer) Email(c context.Context, request *service_user_register.RegisterEmailRequest) (*service_user_register.RegisterResultResponse, error) {
 	message := "success"
 	status := s.checkEmailParams(request)
 	if status != codes.Success {
@@ -61,7 +61,7 @@ func (s *UserRegisterServer) Email(c context.Context, request *service_user_regi
 	}, nil
 }
 
-func (s *UserRegisterServer) checkEmailParams(request *service_user_register.EmailRequest) int {
+func (s *UserRegisterServer) checkEmailParams(request *service_user_register.RegisterEmailRequest) int {
 	email := request.GetEmail()
 	passwd := request.GetPassword()
 	//检查邮箱和密码格式

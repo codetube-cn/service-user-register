@@ -2,7 +2,7 @@ package server
 
 import (
 	"codetube.cn/core/codes"
-	service_user_register "codetube.cn/proto/service-user-register"
+	"codetube.cn/proto/service_user_register"
 	"codetube.cn/service-user-register/components"
 	"codetube.cn/service-user-register/libraries/check"
 	"codetube.cn/service-user-register/libraries/password"
@@ -14,7 +14,7 @@ import (
 )
 
 // Username 使用用户名和密码注册
-func (s *UserRegisterServer) Username(c context.Context, request *service_user_register.UsernameRequest) (*service_user_register.RegisterResultResponse, error) {
+func (s *UserRegisterServer) Username(c context.Context, request *service_user_register.RegisterUsernameRequest) (*service_user_register.RegisterResultResponse, error) {
 	message := "success"
 	status := s.checkUsernameParams(request)
 	if status != codes.Success {
@@ -60,7 +60,7 @@ func (s *UserRegisterServer) Username(c context.Context, request *service_user_r
 	}, nil
 }
 
-func (s *UserRegisterServer) checkUsernameParams(request *service_user_register.UsernameRequest) int {
+func (s *UserRegisterServer) checkUsernameParams(request *service_user_register.RegisterUsernameRequest) int {
 	username := request.GetUsername()
 	passwd := request.GetPassword()
 

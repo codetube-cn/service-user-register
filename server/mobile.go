@@ -3,7 +3,7 @@ package server
 import (
 	"codetube.cn/core/codes"
 	core_libraries "codetube.cn/core/libraries"
-	service_user_register "codetube.cn/proto/service-user-register"
+	"codetube.cn/proto/service_user_register"
 	"codetube.cn/service-user-register/components"
 	"codetube.cn/service-user-register/libraries"
 	"codetube.cn/service-user-register/libraries/check"
@@ -15,7 +15,7 @@ import (
 )
 
 // Mobile 使用邮箱注册
-func (s *UserRegisterServer) Mobile(c context.Context, request *service_user_register.MobileRequest) (*service_user_register.RegisterResultResponse, error) {
+func (s *UserRegisterServer) Mobile(c context.Context, request *service_user_register.RegisterMobileRequest) (*service_user_register.RegisterResultResponse, error) {
 	message := "success"
 	status := s.checkMobileParams(request)
 	if status != codes.Success {
@@ -65,7 +65,7 @@ func (s *UserRegisterServer) Mobile(c context.Context, request *service_user_reg
 	}, nil
 }
 
-func (s *UserRegisterServer) checkMobileParams(request *service_user_register.MobileRequest) int {
+func (s *UserRegisterServer) checkMobileParams(request *service_user_register.RegisterMobileRequest) int {
 	mobile := request.GetMobile()
 	verifyCode := request.GetVerifyCode()
 	//检查手机号格式

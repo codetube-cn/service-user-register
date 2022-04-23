@@ -1,7 +1,7 @@
 package server
 
 import (
-	service_user_register "codetube.cn/proto/service-user-register"
+	"codetube.cn/proto/service_user_register"
 )
 
 type UserRegisterServer struct {
