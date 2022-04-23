@@ -9,6 +9,7 @@ import (
 	"codetube.cn/service-user-register/libraries/password"
 	"codetube.cn/service-user-register/models"
 	"context"
+	"github.com/google/uuid"
 	"log"
 	"strconv"
 )
@@ -21,13 +22,13 @@ func (s *UserRegisterServer) Email(c context.Context, request *service_user_regi
 		return &service_user_register.RegisterResultResponse{
 			Status:  int64(status),
 			Message: message, //@todo 数字转文字
-			Id:      0,
+			Id:      "",
 		}, nil
 	}
 
 	email := request.GetEmail()
 	passwd := request.GetPassword()
-	id := int64(0)
+	var id string
 	//检查邮箱是否重复
 	userExist := check.UserExistByEmail(email)
 	if userExist {
@@ -46,10 +47,10 @@ func (s *UserRegisterServer) Email(c context.Context, request *service_user_regi
 		if result.Error != nil {
 			status = codes.UserRegisterInsertDbFailed
 			log.Println("[err:"+strconv.Itoa(codes.UserRegisterInsertDbFailed)+"]写入用户信息失败：", result.Error)
-		} else if user.ID < 1 {
+		} else if user.ID == uuid.Nil {
 			status = codes.UserRegisterFailed
 		} else {
-			id = int64(user.ID)
+			id = user.ID.String()
 			//@todo 其他逻辑，例如广播通知其他服务
 		}
 	}

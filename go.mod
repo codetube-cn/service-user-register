@@ -6,6 +6,7 @@ require (
 	codetube.cn/core v1.0.0
 	codetube.cn/proto v1.0.0
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/google/uuid v1.1.2
 	github.com/joho/godotenv v1.4.0
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	google.golang.org/grpc v1.45.0

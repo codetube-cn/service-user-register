@@ -9,6 +9,7 @@ import (
 	"codetube.cn/service-user-register/libraries/check"
 	"codetube.cn/service-user-register/models"
 	"context"
+	"github.com/google/uuid"
 	"log"
 	"strconv"
 )
@@ -21,12 +22,12 @@ func (s *UserRegisterServer) Mobile(c context.Context, request *service_user_reg
 		return &service_user_register.RegisterResultResponse{
 			Status:  int64(status),
 			Message: message, //@todo 数字转文字
-			Id:      0,
+			Id:      "",
 		}, nil
 	}
 
 	mobile := request.GetMobile()
-	id := int64(0)
+	var id string
 	//检查手机号是否重复
 	userExist := check.UserExistByMobile(mobile)
 	if userExist {
@@ -44,10 +45,10 @@ func (s *UserRegisterServer) Mobile(c context.Context, request *service_user_reg
 		if result.Error != nil {
 			status = codes.UserRegisterInsertDbFailed
 			log.Println("[err:"+strconv.Itoa(codes.UserRegisterInsertDbFailed)+"]写入用户信息失败：", result.Error)
-		} else if user.ID < 1 {
+		} else if user.ID == uuid.Nil {
 			status = codes.UserRegisterFailed
 		} else {
-			id = int64(user.ID)
+			id = user.ID.String()
 			//@todo 其他逻辑，例如广播通知其他服务
 		}
 		//清除验证码
