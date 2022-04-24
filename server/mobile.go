@@ -14,7 +14,7 @@ import (
 	"strconv"
 )
 
-// Mobile 使用邮箱注册
+// Mobile 使用手机号注册
 func (s *UserRegisterServer) Mobile(c context.Context, request *service_user_register.RegisterMobileRequest) (*service_user_register.RegisterResultResponse, error) {
 	message := "success"
 	status := s.checkMobileParams(request)
